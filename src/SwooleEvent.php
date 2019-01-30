@@ -3,11 +3,11 @@
 namespace Mix\Http\Server;
 
 /**
- * Class HttpServerEvent
+ * Class SwooleEvent
  * @package Mix\Http\Server
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class HttpServerEvent
+class SwooleEvent
 {
 
     /**

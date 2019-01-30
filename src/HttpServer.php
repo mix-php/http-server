@@ -83,10 +83,10 @@ class HttpServer extends BeanObject
         $this->_settings = $this->settings + $this->_settings;
         $this->_server->set($this->_settings);
         // 绑定事件
-        $this->_server->on(HttpServerEvent::START, [$this, 'onStart']);
-        $this->_server->on(HttpServerEvent::MANAGER_START, [$this, 'onManagerStart']);
-        $this->_server->on(HttpServerEvent::WORKER_START, [$this, 'onWorkerStart']);
-        $this->_server->on(HttpServerEvent::REQUEST, [$this, 'onRequest']);
+        $this->_server->on(SwooleEvent::START, [$this, 'onStart']);
+        $this->_server->on(SwooleEvent::MANAGER_START, [$this, 'onManagerStart']);
+        $this->_server->on(SwooleEvent::WORKER_START, [$this, 'onWorkerStart']);
+        $this->_server->on(SwooleEvent::REQUEST, [$this, 'onRequest']);
         // 欢迎信息
         $this->welcome();
         // 启动
