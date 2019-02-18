@@ -2,8 +2,8 @@
 
 namespace Mix\Http\Server;
 
-use Mix\Core\BeanObject;
-use Mix\Core\Coroutine;
+use Mix\Core\Bean\BeanObject;
+use Mix\Core\Coroutine\Coroutine;
 use Mix\Helpers\ProcessHelper;
 
 /**
