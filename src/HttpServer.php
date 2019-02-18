@@ -96,7 +96,7 @@ class HttpServer extends BeanObject
     /**
      * 主进程启动事件
      */
-    protected function onStart($server)
+    public function onStart($server)
     {
         try {
             // 进程命名
@@ -107,7 +107,7 @@ class HttpServer extends BeanObject
     }
 
     // 管理进程启动事件
-    protected function onManagerStart($server)
+    public function onManagerStart($server)
     {
         try {
             // 进程命名
@@ -120,7 +120,7 @@ class HttpServer extends BeanObject
     /**
      * 工作进程启动事件
      */
-    protected function onWorkerStart($server, $workerId)
+    public function onWorkerStart($server, $workerId)
     {
         try {
             // 进程命名
@@ -140,7 +140,7 @@ class HttpServer extends BeanObject
     /**
      * 请求事件
      */
-    protected function onRequest($request, $response)
+    public function onRequest($request, $response)
     {
         try {
             // 执行请求
