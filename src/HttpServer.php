@@ -2,8 +2,8 @@
 
 namespace Mix\Http\Server;
 
-use Mix\Core\Bean\BeanObject;
-use Mix\Core\Coroutine\Coroutine;
+use Mix\Core\Bean\AbstractObject;
+use Mix\Core\Coroutine;
 use Mix\Helpers\ProcessHelper;
 
 /**
@@ -11,7 +11,7 @@ use Mix\Helpers\ProcessHelper;
  * @package Mix\Http\Server
  * @author LIUJIAN <coder.keda@gmail.com>
  */
-class HttpServer extends BeanObject
+class HttpServer extends AbstractObject
 {
 
     /**
