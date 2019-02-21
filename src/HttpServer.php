@@ -51,8 +51,6 @@ class HttpServer extends AbstractObject
         'worker_num'       => 8,
         // 任务进程数
         'task_worker_num'  => 0,
-        // 进程的最大任务数
-        'max_request'      => 10000,
         // PID 文件
         'pid_file'         => '/var/run/mix-httpd.pid',
         // 日志文件路径
