@@ -94,7 +94,7 @@ class HttpServer extends AbstractObject
     /**
      * 主进程启动事件
      */
-    public function onStart($server)
+    public function onStart(\Swoole\Http\Server $server)
     {
         try {
             // 进程命名
@@ -118,7 +118,7 @@ class HttpServer extends AbstractObject
     /**
      * 工作进程启动事件
      */
-    public function onWorkerStart($server, $workerId)
+    public function onWorkerStart(\Swoole\Http\Server $server, int $workerId)
     {
         try {
             // 进程命名
@@ -138,7 +138,7 @@ class HttpServer extends AbstractObject
     /**
      * 请求事件
      */
-    public function onRequest($request, $response)
+    public function onRequest(\Swoole\Http\Request $request, \Swoole\Http\Response $response)
     {
         try {
             // 执行请求
