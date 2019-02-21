@@ -142,8 +142,8 @@ class HttpServer extends AbstractObject
     {
         try {
             // 执行请求
-            \Mix::$app->request->initializeRequest($request);
-            \Mix::$app->response->initializeRequest($response);
+            \Mix::$app->request->beforeInitialize($request);
+            \Mix::$app->response->beforeInitialize($response);
             \Mix::$app->run();
             // 开启协程时，移除容器
             if (($tid = Coroutine::id()) !== -1) {
