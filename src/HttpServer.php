@@ -27,10 +27,10 @@ class HttpServer extends AbstractObject
     public $port = 9501;
 
     /**
-     * 配置文件
-     * @var string
+     * 应用配置
+     * @var array
      */
-    public $configurationFile = '';
+    public $application = [];
 
     /**
      * 运行参数
@@ -128,8 +128,7 @@ class HttpServer extends AbstractObject
                 ProcessHelper::setProcessTitle("mix-httpd: task #{$workerId}");
             }
             // 实例化App
-            $config = require $this->configurationFile;
-            new \Mix\Http\Application($config);
+            new \Mix\Http\Application(require $this->application['config_file']);
         } catch (\Throwable $e) {
             \Mix::$app->error->handleException($e);
         }
@@ -182,7 +181,7 @@ EOL;
         println("Listen         Port:      {$this->port}");
         println('Reactor        Num:       ' . $this->_settings['reactor_num']);
         println('Worker         Num:       ' . $this->_settings['worker_num']);
-        println("Configuration  File:      {$this->configurationFile}");
+        println("Configuration  File:      {$this->application['config_file']}");
     }
 
 }
