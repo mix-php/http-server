@@ -70,6 +70,12 @@ class HttpServer extends AbstractObject
     protected $_server;
 
     /**
+     * 服务名称
+     * @var string
+     */
+    const SERVER_NAME = 'mix-httpd';
+
+    /**
      * 启动服务
      * @return bool
      */
@@ -96,23 +102,15 @@ class HttpServer extends AbstractObject
      */
     public function onStart(\Swoole\Http\Server $server)
     {
-        try {
-            // 进程命名
-            ProcessHelper::setProcessTitle("mix-httpd: master {$this->host}:{$this->port}");
-        } catch (\Throwable $e) {
-            \Mix::$app->error->handleException($e);
-        }
+        // 进程命名
+        ProcessHelper::setProcessTitle(static::SERVER_NAME . ": master {$this->host}:{$this->port}");
     }
 
     // 管理进程启动事件
     public function onManagerStart($server)
     {
-        try {
-            // 进程命名
-            ProcessHelper::setProcessTitle("mix-httpd: manager");
-        } catch (\Throwable $e) {
-            \Mix::$app->error->handleException($e);
-        }
+        // 进程命名
+        ProcessHelper::setProcessTitle(static::SERVER_NAME . ": manager");
     }
 
     /**
@@ -120,18 +118,14 @@ class HttpServer extends AbstractObject
      */
     public function onWorkerStart(\Swoole\Http\Server $server, int $workerId)
     {
-        try {
-            // 进程命名
-            if ($workerId < $server->setting['worker_num']) {
-                ProcessHelper::setProcessTitle("mix-httpd: worker #{$workerId}");
-            } else {
-                ProcessHelper::setProcessTitle("mix-httpd: task #{$workerId}");
-            }
-            // 实例化App
-            new \Mix\Http\Application(require $this->configFile);
-        } catch (\Throwable $e) {
-            \Mix::$app->error->handleException($e);
+        // 进程命名
+        if ($workerId < $server->setting['worker_num']) {
+            ProcessHelper::setProcessTitle(static::SERVER_NAME . ": worker #{$workerId}");
+        } else {
+            ProcessHelper::setProcessTitle(static::SERVER_NAME . ": task #{$workerId}");
         }
+        // 实例化App
+        new \Mix\Http\Application(require $this->configFile);
     }
 
     /**
@@ -144,12 +138,14 @@ class HttpServer extends AbstractObject
             \Mix::$app->request->beforeInitialize($request);
             \Mix::$app->response->beforeInitialize($response);
             \Mix::$app->run();
-            // 开启协程时，移除容器
-            if (($tid = Coroutine::id()) !== -1) {
-                \Mix::$app->container->delete($tid);
-            }
         } catch (\Throwable $e) {
             \Mix::$app->error->handleException($e);
+        }
+        // 清扫组件容器
+        \Mix::$app->cleanComponents();
+        // 开启协程时，移除容器
+        if (($tid = Coroutine::id()) !== -1) {
+            \Mix::$app->container->delete($tid);
         }
     }
 
@@ -159,7 +155,7 @@ class HttpServer extends AbstractObject
     protected function welcome()
     {
         $swooleVersion = swoole_version();
-        $phpVersion    = PHP_VERSION;
+        $phpVersion = PHP_VERSION;
         echo <<<EOL
                              _____
 _______ ___ _____ ___   _____  / /_  ____
@@ -170,7 +166,7 @@ _/ / / / / / / /\ \/ _ / /_/ / / / / /_/ /
 
 
 EOL;
-        println('Server         Name:      mix-httpd');
+        println('Server         Name:      ' . static::SERVER_NAME);
         println('System         Name:      ' . strtolower(PHP_OS));
         println("PHP            Version:   {$phpVersion}");
         println("Swoole         Version:   {$swooleVersion}");
