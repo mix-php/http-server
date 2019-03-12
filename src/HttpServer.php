@@ -88,6 +88,10 @@ class HttpServer extends AbstractObject
         // 配置参数
         $this->_setting = $this->setting + $this->_setting;
         $this->_server->set($this->_setting);
+        // 关闭内置协程
+        $this->_server->set([
+            'enable_coroutine' => false,
+        ]);
         // 绑定事件
         $this->_server->on(SwooleEvent::START, [$this, 'onStart']);
         $this->_server->on(SwooleEvent::MANAGER_START, [$this, 'onManagerStart']);
@@ -135,6 +139,12 @@ class HttpServer extends AbstractObject
      */
     public function onRequest(\Swoole\Http\Request $request, \Swoole\Http\Response $response)
     {
+        if ($this->_setting['enable_coroutine'] && Coroutine::id() == -1) {
+            xgo(function () use ($request, $response) {
+                call_user_func([$this, __FUNCTION__], $request, $response);
+            });
+            return;
+        }
         try {
             // 执行请求
             \Mix::$app->request->beforeInitialize($request);
@@ -144,10 +154,8 @@ class HttpServer extends AbstractObject
             \Mix::$app->error->handleException($e);
         }
         // 清扫组件容器
-        \Mix::$app->cleanComponents();
-        // 开启协程时，移除容器
-        if (($tid = Coroutine::id()) !== -1) {
-            \Mix::$app->container->delete($tid);
+        if (!$this->_setting['enable_coroutine']) {
+            \Mix::$app->cleanComponents();
         }
     }
 
