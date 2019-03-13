@@ -141,7 +141,7 @@ class HttpServer extends AbstractObject
     {
         if ($this->_setting['enable_coroutine'] && Coroutine::id() == -1) {
             xgo(function () use ($request, $response) {
-                call_user_func([$this, __FUNCTION__], $request, $response);
+                call_user_func([$this, 'onRequest'], $request, $response);
             });
             return;
         }
@@ -165,7 +165,7 @@ class HttpServer extends AbstractObject
     protected function welcome()
     {
         $swooleVersion = swoole_version();
-        $phpVersion = PHP_VERSION;
+        $phpVersion    = PHP_VERSION;
         echo <<<EOL
                              _____
 _______ ___ _____ ___   _____  / /_  ____
