@@ -5,7 +5,7 @@ namespace Mix\Http\Server;
 /**
  * Class SwooleEvent
  * @package Mix\Http\Server
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class SwooleEvent
 {

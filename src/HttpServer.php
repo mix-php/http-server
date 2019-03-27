@@ -9,7 +9,7 @@ use Mix\Helper\ProcessHelper;
 /**
  * Class HttpServer
  * @package Mix\Http\Server
- * @author LIUJIAN <coder.keda@gmail.com>
+ * @author liu,jian <coder.keda@gmail.com>
  */
 class HttpServer extends AbstractObject
 {
