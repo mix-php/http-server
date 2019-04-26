@@ -152,10 +152,11 @@ class HttpServer extends AbstractObject
             \Mix::$app->run();
         } catch (\Throwable $e) {
             \Mix::$app->error->handleException($e);
-        }
-        // 清扫组件容器
-        if (!$this->_setting['enable_coroutine']) {
-            \Mix::$app->cleanComponents();
+        } finally {
+            // 清扫组件容器
+            if (!$this->_setting['enable_coroutine']) {
+                \Mix::$app->cleanComponents();
+            }
         }
     }
 
