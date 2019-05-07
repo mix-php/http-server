@@ -44,37 +44,37 @@ class HttpServer extends AbstractObject
      */
     protected $_defaultSetting = [
         // 开启协程
-        'enable_coroutine'       => false,
+        'enable_coroutine'    => false,
         // 主进程事件处理线程数
-        'reactor_num'            => 8,
+        'reactor_num'         => 8,
         // 工作进程数
-        'worker_num'             => 8,
+        'worker_num'          => 8,
         // 任务进程数
-        'task_worker_num'        => 0,
+        'task_worker_num'     => 0,
         // PID 文件
-        'pid_file'               => '/var/run/mix-httpd.pid',
+        'pid_file'            => '/var/run/mix-httpd.pid',
         // 日志文件路径
-        'log_file'               => '/tmp/mix-httpd.log',
+        'log_file'            => '/tmp/mix-httpd.log',
         // 异步安全重启
-        'reload_async'           => true,
+        'reload_async'        => true,
         // 退出等待时间
-        'max_wait_time'          => 60,
+        'max_wait_time'       => 60,
         // 开启后，PDO 协程多次 prepare 才不会有 40ms 延迟
-        'open_tcp_nodelay'       => true,
+        'open_tcp_nodelay'    => true,
         // 进程的最大任务数
-        'max_request'            => 0,
+        'max_request'         => 0,
         // 主进程启动事件回调
-        'start_callback'         => null,
+        'event_start'         => null,
         // 管理进程启动事件回调
-        'manager_start_callback' => null,
+        'event_manager_start' => null,
         // 管理进程停止事件回调
-        'manager_stop_callback'  => null,
+        'event_manager_stop'  => null,
         // 工作进程启动事件回调
-        'worker_start_callback'  => null,
+        'event_worker_start'  => null,
         // 工作进程停止事件回调
-        'worker_stop_callback'   => null,
+        'event_worker_stop'   => null,
         // 请求事件回调
-        'request_callback'       => null,
+        'event_request'       => null,
     ];
 
     /**
@@ -130,7 +130,7 @@ class HttpServer extends AbstractObject
         // 欢迎信息
         $this->welcome();
         // 执行回调
-        $this->_setting['start_callback'] and call_user_func($this->_setting['start_callback']);
+        $this->_setting['event_start'] and call_user_func($this->_setting['event_start']);
         // 启动
         return $this->_server->start();
     }
@@ -160,7 +160,7 @@ class HttpServer extends AbstractObject
             // 实例化App
             new \Mix\Http\Application(require $this->configFile);
             // 执行回调
-            $this->_setting['manager_start_callback'] and call_user_func($this->_setting['manager_start_callback']);
+            $this->_setting['event_manager_start'] and call_user_func($this->_setting['event_manager_start']);
 
         } catch (\Throwable $e) {
             // 错误处理
@@ -188,13 +188,13 @@ class HttpServer extends AbstractObject
         try {
 
             // 执行回调
-            $this->_setting['manager_stop_callback'] and call_user_func($this->_setting['manager_stop_callback']);
+            $this->_setting['event_manager_stop'] and call_user_func($this->_setting['event_manager_stop']);
 
         } catch (\Throwable $e) {
             // 错误处理
             \Mix::$app->error->handleException($e);
         } finally {
-            // 清扫组件容器(同步模式, 协程会在xgo内清扫)
+            // 清扫组件容器(仅同步模式, 协程会在xgo内清扫)
             if (!$this->_setting['enable_coroutine']) {
                 \Mix::$app->cleanComponents();
             }
@@ -225,13 +225,13 @@ class HttpServer extends AbstractObject
             // 实例化App
             new \Mix\Http\Application(require $this->configFile);
             // 执行回调
-            $this->_setting['worker_start_callback'] and call_user_func($this->_setting['worker_start_callback']);
+            $this->_setting['event_worker_start'] and call_user_func($this->_setting['event_worker_start']);
 
         } catch (\Throwable $e) {
             // 错误处理
             \Mix::$app->error->handleException($e);
         } finally {
-            // 清扫组件容器(同步模式, 协程会在xgo内清扫)
+            // 清扫组件容器(仅同步模式, 协程会在xgo内清扫)
             if (!$this->_setting['enable_coroutine']) {
                 \Mix::$app->cleanComponents();
             }
@@ -254,13 +254,13 @@ class HttpServer extends AbstractObject
         try {
 
             // 执行回调
-            $this->_setting['worker_stop_callback'] and call_user_func($this->_setting['worker_stop_callback']);
+            $this->_setting['event_worker_stop'] and call_user_func($this->_setting['event_worker_stop']);
 
         } catch (\Throwable $e) {
             // 错误处理
             \Mix::$app->error->handleException($e);
         } finally {
-            // 清扫组件容器(同步模式, 协程会在xgo内清扫)
+            // 清扫组件容器(仅同步模式, 协程会在xgo内清扫)
             if (!$this->_setting['enable_coroutine']) {
                 \Mix::$app->cleanComponents();
             }
@@ -285,15 +285,15 @@ class HttpServer extends AbstractObject
             \Mix::$app->response->beforeInitialize($response);
             \Mix::$app->run();
             // 执行回调
-            $this->_setting['request_callback'] and call_user_func($this->_setting['request_callback'], true);
+            $this->_setting['event_request'] and call_user_func($this->_setting['event_request'], true);
 
         } catch (\Throwable $e) {
             // 错误处理
             \Mix::$app->error->handleException($e);
             // 执行回调
-            $this->_setting['request_callback'] and call_user_func($this->_setting['request_callback'], false);
+            $this->_setting['event_request'] and call_user_func($this->_setting['event_request'], false);
         } finally {
-            // 清扫组件容器(同步模式, 协程会在xgo内清扫)
+            // 清扫组件容器(仅同步模式, 协程会在xgo内清扫)
             if (!$this->_setting['enable_coroutine']) {
                 \Mix::$app->cleanComponents();
             }
