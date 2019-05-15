@@ -292,6 +292,8 @@ class HttpServer extends AbstractObject
 
     /**
      * 请求事件
+     * @param \Swoole\Http\Request $request
+     * @param \Swoole\Http\Response $response
      */
     public function onRequest(\Swoole\Http\Request $request, \Swoole\Http\Response $response)
     {
