@@ -5,13 +5,14 @@ namespace Mix\Http\Server;
 use Mix\Core\Coroutine;
 use Mix\Helper\ProcessHelper;
 use Mix\Server\Event;
+use Mix\Server\AbstractServer;
 
 /**
  * Class HttpServer
  * @package Mix\Http\Server
  * @author liu,jian <coder.keda@gmail.com>
  */
-class HttpServer extends Mix\Server\AbstractServer
+class HttpServer extends AbstractServer
 {
 
     /**
