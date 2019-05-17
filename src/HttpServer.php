@@ -16,6 +16,12 @@ class HttpServer extends AbstractServer
 {
 
     /**
+     * 服务名称
+     * @var string
+     */
+    const SERVER_NAME = 'mix-httpd';
+
+    /**
      * 主机
      * @var string
      */
@@ -73,12 +79,6 @@ class HttpServer extends AbstractServer
         // 请求错误回调
         'hook_request_error'   => null,
     ];
-
-    /**
-     * 服务名称
-     * @var string
-     */
-    const SERVER_NAME = 'mix-httpd';
 
     /**
      * 启动服务
