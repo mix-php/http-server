@@ -16,6 +16,12 @@ class HttpServer extends AbstractServer
 {
 
     /**
+     * 主机
+     * @var string
+     */
+    public $host = '127.0.0.1';
+
+    /**
      * 端口
      * @var int
      */
