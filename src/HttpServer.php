@@ -59,7 +59,7 @@ class HttpServer extends AbstractObject
         'reload_async'         => true,
         // 退出等待时间
         'max_wait_time'        => 60,
-        // 开启后，PDO 协程多次 prepare 才不会有 40ms 延迟
+        // 开启后，PDO协程多次prepare才不会有40ms延迟
         'open_tcp_nodelay'     => true,
         // 进程的最大任务数
         'max_request'          => 0,
