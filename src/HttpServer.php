@@ -16,12 +16,6 @@ class HttpServer extends AbstractServer
 {
 
     /**
-     * 服务名称
-     * @var string
-     */
-    public $name = 'mix-httpd';
-
-    /**
      * 主机
      * @var string
      */
@@ -131,7 +125,7 @@ class HttpServer extends AbstractServer
             // 执行回调
             $this->setting['hook_worker_start'] and call_user_func($this->setting['hook_worker_start'], $server);
             // 实例化App
-            new \Mix\Http\Application(require $this->configFile);
+            new \Mix\Http\Application($this->config);
 
         } catch (\Throwable $e) {
             // 错误处理
