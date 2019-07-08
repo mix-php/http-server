@@ -2,15 +2,16 @@
 
 namespace Mix\Http\Server;
 
-use Co\Http\Server;
 use Mix\Bean\BeanInjector;
+use Mix\Http\Message\Factory\ResponseFactory;
+use Mix\Http\Message\Factory\ServerRequestFactory;
 
 /**
  * Class HttpServer
  * @package Mix\Http\Server
  * @author liu,jian <coder.keda@gmail.com>
  */
-class HttpServer extends Server
+class HttpServer
 {
 
     /**
@@ -42,6 +43,15 @@ class HttpServer extends Server
     public function __construct(array $config)
     {
         BeanInjector::inject($this, $config);
+        $this->init();
+    }
+
+    /**
+     * init
+     */
+    public function init()
+    {
+        $this->swooleServer = new \Swoole\Coroutine\Http\Server($this->host, $this->port, $this->ssl);
     }
 
     /**
@@ -62,9 +72,13 @@ class HttpServer extends Server
     {
         return $this->swooleServer->handle(
             $pattern,
-            function () use ($callback) {
+            function (\Swoole\Http\Request $req, \Swoole\Http\Response $res) use ($callback) {
                 try {
-                    call_user_func($callback);
+                    // 生成psr的rep,res
+                    $request  = ServerRequestFactory::createFromSwoole($req);
+                    $response = ResponseFactory::createFromSwoole($res);
+                    // 执行回调
+                    call_user_func($callback, $request, $response);
                 } catch (\Throwable $e) {
                     $isMix = class_exists(\Mix::class) && class_exists(\Mix\Console\Error::class);
                     // 错误处理
