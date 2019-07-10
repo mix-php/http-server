@@ -21,12 +21,19 @@ class RequestHandler implements RequestHandlerInterface
     public $middleware;
 
     /**
+     * @var ResponseInterface
+     */
+    public $response;
+
+    /**
      * RequestHandler constructor.
      * @param array $middleware
+     * @param ResponseInterface $response
      */
-    public function __construct(array $middleware)
+    public function __construct(array $middleware, ResponseInterface $response)
     {
         $this->middleware = $middleware;
+        $this->response   = $response;
     }
 
     /**
@@ -37,6 +44,9 @@ class RequestHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $middleware = array_shift($this->middleware);
+        if (!$middleware) {
+            return $this->response;
+        }
         return $middleware->process($request, $this);
     }
 

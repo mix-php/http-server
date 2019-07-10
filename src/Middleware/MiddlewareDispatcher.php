@@ -58,7 +58,7 @@ class MiddlewareDispatcher
      */
     public function dispatch(): ResponseInterface
     {
-        return (new RequestHandler($this->middleware))->handle($this->request);
+        return (new RequestHandler($this->middleware, $this->response))->handle($this->request);
     }
 
 }
