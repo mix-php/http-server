@@ -72,11 +72,11 @@ class HttpServer
     {
         return $this->swooleServer->handle(
             $pattern,
-            function (\Swoole\Http\Request $req, \Swoole\Http\Response $res) use ($callback) {
+            function (\Swoole\Http\Request $req, \Swoole\Http\Response $resp) use ($callback) {
                 try {
                     // 生成psr的rep,res
-                    $request  = ServerRequestFactory::createFromSwoole($req);
-                    $response = ResponseFactory::createFromSwoole($res);
+                    $request  = (new ServerRequestFactory)->createServerRequestFromSwoole($req);
+                    $response = (new ResponseFactory)->createResponseFromSwoole($resp);
                     // 执行回调
                     call_user_func($callback, $request, $response);
                 } catch (\Throwable $e) {
