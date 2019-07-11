@@ -36,21 +36,15 @@ class HttpServer
 
     /**
      * HttpServer constructor.
-     * @param array $config
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
+     * @param string $host
+     * @param int $port
+     * @param bool $ssl
      */
-    public function __construct(array $config)
+    public function __construct(string $host, int $port, bool $ssl)
     {
-        BeanInjector::inject($this, $config);
-        $this->init();
-    }
-
-    /**
-     * init
-     */
-    public function init()
-    {
+        $this->host         = $host;
+        $this->port         = $port;
+        $this->ssl          = $ssl;
         $this->swooleServer = new \Swoole\Coroutine\Http\Server($this->host, $this->port, $this->ssl);
     }
 
