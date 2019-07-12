@@ -45,7 +45,7 @@ class HttpServer
         $this->host         = $host;
         $this->port         = $port;
         $this->ssl          = $ssl;
-        $this->swooleServer = new \Swoole\Coroutine\Http\Server($this->host, $this->port, $this->ssl);
+        $this->swooleServer = new \Swoole\Coroutine\Http\Server($host, $port, $ssl);
     }
 
     /**
