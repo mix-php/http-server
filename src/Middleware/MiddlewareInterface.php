@@ -15,6 +15,7 @@ interface MiddlewareInterface extends \Psr\Http\Server\MiddlewareInterface
 
     /**
      * MiddlewareInterface constructor.
+     *
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
      */
