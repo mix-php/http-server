@@ -2,9 +2,11 @@
 
 namespace Mix\Http\Server;
 
-use Mix\Bean\BeanInjector;
 use Mix\Http\Message\Factory\ResponseFactory;
 use Mix\Http\Message\Factory\ServerRequestFactory;
+use Swoole\Coroutine\Http\Server;
+use Swoole\Http\Request;
+use Swoole\Http\Response;
 
 /**
  * Class HttpServer
@@ -45,11 +47,11 @@ class HttpServer
         $this->host         = $host;
         $this->port         = $port;
         $this->ssl          = $ssl;
-        $this->swooleServer = new \Swoole\Coroutine\Http\Server($host, $port, $ssl);
+        $this->swooleServer = new Server($host, $port, $ssl);
     }
 
     /**
-     * set
+     * Set
      * @param array $options
      */
     public function set(array $options)
@@ -58,7 +60,7 @@ class HttpServer
     }
 
     /**
-     * handle
+     * Handle
      * @param string $pattern
      * @param callable $callback
      */
@@ -66,7 +68,7 @@ class HttpServer
     {
         return $this->swooleServer->handle(
             $pattern,
-            function (\Swoole\Http\Request $req, \Swoole\Http\Response $resp) use ($callback) {
+            function (Request $req, Response $resp) use ($callback) {
                 try {
                     // 生成psr的rep,res
                     $request  = (new ServerRequestFactory)->createServerRequestFromSwoole($req);
@@ -89,7 +91,7 @@ class HttpServer
     }
 
     /**
-     * start
+     * Start
      */
     public function start()
     {
@@ -97,7 +99,7 @@ class HttpServer
     }
 
     /**
-     * shutdown
+     * Shutdown
      */
     public function shutdown()
     {
