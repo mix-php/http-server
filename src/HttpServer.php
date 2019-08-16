@@ -44,10 +44,10 @@ class HttpServer
      */
     public function __construct(string $host, int $port, bool $ssl)
     {
-        $this->host         = $host;
-        $this->port         = $port;
-        $this->ssl          = $ssl;
-        $this->swooleServer = new Server($host, $port, $ssl);
+        $this->host              = $host;
+        $this->port              = $port;
+        $this->ssl               = $ssl;
+        $this->swooleServer      = new Server($host, $port, $ssl);
     }
 
     /**
@@ -68,10 +68,10 @@ class HttpServer
     {
         return $this->swooleServer->handle(
             $pattern,
-            function (Request $req, Response $resp) use ($callback) {
+            function (Request $requ, Response $resp) use ($callback) {
                 try {
-                    // 生成psr的rep,res
-                    $request  = (new ServerRequestFactory)->createServerRequestFromSwoole($req);
+                    // 生成PSR的request,response
+                    $request  = (new ServerRequestFactory)->createServerRequestFromSwoole($requ);
                     $response = (new ResponseFactory)->createResponseFromSwoole($resp);
                     // 执行回调
                     call_user_func($callback, $request, $response);
