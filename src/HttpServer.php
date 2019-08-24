@@ -32,6 +32,16 @@ class HttpServer
     public $ssl = false;
 
     /**
+     * @var array
+     */
+    protected $options = [];
+
+    /**
+     * @var []callable
+     */
+    protected $callbacks = [];
+
+    /**
      * @var Server
      */
     public $swooleServer;
@@ -44,10 +54,9 @@ class HttpServer
      */
     public function __construct(string $host, int $port, bool $ssl)
     {
-        $this->host              = $host;
-        $this->port              = $port;
-        $this->ssl               = $ssl;
-        $this->swooleServer      = new Server($host, $port, $ssl);
+        $this->host = $host;
+        $this->port = $port;
+        $this->ssl  = $ssl;
     }
 
     /**
@@ -56,7 +65,7 @@ class HttpServer
      */
     public function set(array $options)
     {
-        return $this->swooleServer->set($options);
+        $this->options = $options;
     }
 
     /**
@@ -66,9 +75,18 @@ class HttpServer
      */
     public function handle(string $pattern, callable $callback)
     {
-        return $this->swooleServer->handle(
-            $pattern,
-            function (Request $requ, Response $resp) use ($callback) {
+        $this->callbacks[$pattern] = $callback;
+    }
+
+    /**
+     * Start
+     */
+    public function start()
+    {
+        $server = $this->swooleServer = new Server($host, $port, $ssl);
+        $server->set($options);
+        foreach ($this->callbacks as $pattern => $callback) {
+            $server->handle($pattern, function (Request $requ, Response $resp) use ($callback) {
                 try {
                     // 生成PSR的request,response
                     $request  = (new ServerRequestFactory)->createServerRequestFromSwoole($requ);
@@ -86,16 +104,9 @@ class HttpServer
                     $error = \Mix::$app->context->get('error');
                     $error->handleException($e);
                 }
-            }
-        );
-    }
-
-    /**
-     * Start
-     */
-    public function start()
-    {
-        return $this->swooleServer->start();
+            });
+        }
+        return $server->start();
     }
 
     /**
