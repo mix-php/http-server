@@ -2,8 +2,8 @@
 
 namespace Mix\Http\Server\Middleware;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Mix\Http\Message\Response;
+use Mix\Http\Message\ServerRequest;
 
 /**
  * Interface MiddlewareInterface
@@ -15,10 +15,9 @@ interface MiddlewareInterface extends \Psr\Http\Server\MiddlewareInterface
 
     /**
      * MiddlewareInterface constructor.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
+     * @param ServerRequest $request
+     * @param Response $response
      */
-    public function __construct(ServerRequestInterface $request, ResponseInterface $response);
+    public function __construct(ServerRequest $request, Response $response);
 
 }
