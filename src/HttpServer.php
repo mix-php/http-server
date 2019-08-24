@@ -83,8 +83,8 @@ class HttpServer
      */
     public function start()
     {
-        $server = $this->swooleServer = new Server($host, $port, $ssl);
-        $server->set($options);
+        $server = $this->swooleServer = new Server($this->host, $this->port, $this->ssl);
+        $server->set($this->options);
         foreach ($this->callbacks as $pattern => $callback) {
             $server->handle($pattern, function (Request $requ, Response $resp) use ($callback) {
                 try {
