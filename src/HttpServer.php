@@ -32,6 +32,11 @@ class HttpServer
     public $ssl = false;
 
     /**
+     * @var bool
+     */
+    public $reusePort = false;
+
+    /**
      * @var array
      */
     protected $options = [];
@@ -51,12 +56,14 @@ class HttpServer
      * @param string $host
      * @param int $port
      * @param bool $ssl
+     * @param bool $reusePort
      */
-    public function __construct(string $host, int $port, bool $ssl)
+    public function __construct(string $host, int $port, bool $ssl = false, bool $reusePort = false)
     {
-        $this->host = $host;
-        $this->port = $port;
-        $this->ssl  = $ssl;
+        $this->host      = $host;
+        $this->port      = $port;
+        $this->ssl       = $ssl;
+        $this->reusePort = $reusePort;
     }
 
     /**
@@ -83,7 +90,7 @@ class HttpServer
      */
     public function start()
     {
-        $server = $this->swooleServer = new Server($this->host, $this->port, $this->ssl);
+        $server = $this->swooleServer = new Server($this->host, $this->port, $this->ssl, $this->reusePort);
         $server->set($this->options);
         foreach ($this->callbacks as $pattern => $callback) {
             $server->handle($pattern, function (Request $requ, Response $resp) use ($callback) {
@@ -111,6 +118,7 @@ class HttpServer
 
     /**
      * Shutdown
+     * @return bool
      */
     public function shutdown()
     {
