@@ -4,6 +4,8 @@ namespace Mix\Http\Server;
 
 use Mix\Http\Message\Factory\ResponseFactory;
 use Mix\Http\Message\Factory\ServerRequestFactory;
+use Mix\Http\Server\Exception\ShutdownException;
+use Mix\Http\Server\Exception\StartException;
 use Swoole\Coroutine\Http\Server;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
@@ -113,16 +115,19 @@ class HttpServer
                 }
             });
         }
-        return $server->start();
+        if (!$server->start()) {
+            throw new StartException($server->errMsg, $server->errCode);
+        }
     }
 
     /**
      * Shutdown
-     * @return bool
      */
     public function shutdown()
     {
-        return $this->swooleServer->shutdown();
+        if (!$this->swooleServer->shutdown()) {
+            throw new ShutdownException($this->swooleServer->errMsg, $this->swooleServer->errCode);
+        }
     }
 
 }
