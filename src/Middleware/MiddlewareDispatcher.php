@@ -2,10 +2,10 @@
 
 namespace Mix\Http\Server\Middleware;
 
-use Mix\Http\Message\Exception\TypeException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
+use Mix\Http\Server\Exception\TypeException;
 
 /**
  * Class MiddlewareDispatcher
