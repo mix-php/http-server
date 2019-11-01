@@ -4,8 +4,6 @@ namespace Mix\Http\Server;
 
 use Mix\Http\Message\Factory\ResponseFactory;
 use Mix\Http\Message\Factory\ServerRequestFactory;
-use Mix\Http\Server\Exception\ShutdownException;
-use Mix\Http\Server\Exception\StartException;
 use Swoole\Coroutine\Http\Server;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
@@ -116,7 +114,7 @@ class HttpServer
             });
         }
         if (!$server->start()) {
-            throw new StartException($server->errMsg, $server->errCode);
+            throw new \Swoole\Exception($server->errMsg, $server->errCode);
         }
     }
 
@@ -131,7 +129,7 @@ class HttpServer
             if ($errMsg == 'Operation canceled' && $errCode == 125) {
                 return;
             }
-            throw new ShutdownException($errMsg, $errCode);
+            throw new \Swoole\Exception($errMsg, $errCode);
         }
     }
 
