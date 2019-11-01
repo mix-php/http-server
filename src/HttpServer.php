@@ -125,10 +125,10 @@ class HttpServer
      */
     public function shutdown()
     {
-        if (!$this->swooleServer->shutdown()) {
+        if (!$this->swooleServer->shutdown()) { // 返回 null
             $errMsg  = $this->swooleServer->errMsg;
             $errCode = $this->swooleServer->errCode;
-            if ($errCode == 125 && $errMsg == 'Operation canceled') {
+            if ($errMsg == 'Operation canceled' && $errCode == 125) {
                 return;
             }
             throw new ShutdownException($errMsg, $errCode);
