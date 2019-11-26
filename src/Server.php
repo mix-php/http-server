@@ -4,16 +4,15 @@ namespace Mix\Http\Server;
 
 use Mix\Http\Message\Factory\ResponseFactory;
 use Mix\Http\Message\Factory\ServerRequestFactory;
-use Swoole\Coroutine\Http\Server;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
 
 /**
- * Class HttpServer
+ * Class Server
  * @package Mix\Http\Server
  * @author liu,jian <coder.keda@gmail.com>
  */
-class HttpServer
+class Server
 {
 
     /**
@@ -47,7 +46,7 @@ class HttpServer
     protected $callbacks = [];
 
     /**
-     * @var Server
+     * @var \Swoole\Coroutine\Http\Server
      */
     public $swooleServer;
 
@@ -90,7 +89,7 @@ class HttpServer
      */
     public function start()
     {
-        $server = $this->swooleServer = new Server($this->host, $this->port, $this->ssl, $this->reusePort);
+        $server = $this->swooleServer = new \Swoole\Coroutine\Http\Server($this->host, $this->port, $this->ssl, $this->reusePort);
         $server->set($this->options);
         foreach ($this->callbacks as $pattern => $callback) {
             $server->handle($pattern, function (Request $requ, Response $resp) use ($callback) {
