@@ -125,7 +125,7 @@ class Server
         if (!$this->swooleServer->shutdown()) { // 返回 null
             $errMsg  = $this->swooleServer->errMsg;
             $errCode = $this->swooleServer->errCode;
-            if ($errMsg == 'Operation canceled' && $errCode == 125) {
+            if ($errMsg == 'Operation canceled') {
                 return;
             }
             throw new \Swoole\Exception($errMsg, $errCode);
