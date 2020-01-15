@@ -126,9 +126,11 @@ class Server
     /**
      * Shutdown
      */
-    public
-    function shutdown()
+    public function shutdown()
     {
+        if (!$this->swooleServer) {
+            return;
+        }
         if (!$this->swooleServer->shutdown()) { // 返回 null
             $errMsg  = $this->swooleServer->errMsg;
             $errCode = $this->swooleServer->errCode;
