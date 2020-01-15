@@ -86,9 +86,15 @@ class Server
 
     /**
      * Start
+     * @param HandlerInterface|null $handler
+     * @throws \Swoole\Exception
      */
-    public function start()
+    public function start(HandlerInterface $handler = null)
     {
+        if (!is_null($handler)) {
+            $this->callbacks = [];
+            $this->handle('/', [$handler, 'HandleHTTP']);
+        }
         $server = $this->swooleServer = new \Swoole\Coroutine\Http\Server($this->host, $this->port, $this->ssl, $this->reusePort);
         $server->set($this->options);
         foreach ($this->callbacks as $pattern => $callback) {
@@ -120,7 +126,8 @@ class Server
     /**
      * Shutdown
      */
-    public function shutdown()
+    public
+    function shutdown()
     {
         if (!$this->swooleServer->shutdown()) { // 返回 null
             $errMsg  = $this->swooleServer->errMsg;
