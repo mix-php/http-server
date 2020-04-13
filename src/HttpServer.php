@@ -83,12 +83,11 @@ class HttpServer extends AbstractServer
         // 初始化
         $this->server = new \Swoole\Http\Server($this->host, $this->port);
         // 配置参数
+        $this->setting = [
+            'enable_coroutine' => false, // 关闭默认协程，回调中有手动开启支持上下文的协程
+        ] + $this->setting;
         $this->setting += $this->_defaultSetting;
         $this->server->set($this->setting);
-        // 覆盖参数
-        $this->server->set([
-            'enable_coroutine' => false, // 关闭默认协程，回调中有手动开启支持上下文的协程
-        ]);
         // 绑定事件
         $this->server->on(Event::START, [$this, 'onStart']);
         $this->server->on(Event::SHUTDOWN, [$this, 'onShutdown']);
