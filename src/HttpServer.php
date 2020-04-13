@@ -34,6 +34,8 @@ class HttpServer extends AbstractServer
     protected $_defaultSetting = [
         // 开启协程
         'enable_coroutine'     => false,
+        // 最大协程数
+        'max_coroutine'        => 100000,
         // 主进程事件处理线程数
         'reactor_num'          => 8,
         // 工作进程数
