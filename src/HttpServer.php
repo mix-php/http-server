@@ -34,8 +34,6 @@ class HttpServer extends AbstractServer
     protected $_defaultSetting = [
         // 开启协程
         'enable_coroutine'     => false,
-        // 最大协程数
-        'max_coroutine'        => 100000,
         // 主进程事件处理线程数
         'reactor_num'          => 8,
         // 工作进程数
@@ -85,11 +83,11 @@ class HttpServer extends AbstractServer
         // 初始化
         $this->server = new \Swoole\Http\Server($this->host, $this->port);
         // 配置参数
-        $this->setting = [
+        $this->setting += $this->_defaultSetting;
+        $setting = [
             'enable_coroutine' => false, // 关闭默认协程，回调中有手动开启支持上下文的协程
         ] + $this->setting;
-        $this->setting += $this->_defaultSetting;
-        $this->server->set($this->setting);
+        $this->server->set($setting);
         // 绑定事件
         $this->server->on(Event::START, [$this, 'onStart']);
         $this->server->on(Event::SHUTDOWN, [$this, 'onShutdown']);
